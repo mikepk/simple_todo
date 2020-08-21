@@ -5,7 +5,7 @@ except ImportError:
     use_setuptools()
 
 setup(name='todo',
-      version='0.1',
+      version='0.4',
       description='A dirt simple todo command that uses the todo.txt format and plain text files',
       license='MIT',
       keywords='todo, command line',

@@ -3,14 +3,15 @@ import re
 import sys
 import os
 try:
-    from ConfigParser import ConfigParser
+    from ConfigParser import ConfigParser, NoSectionError
 except ImportError:
-    from configparser import ConfigParser
+    from configparser import ConfigParser, NoSectionError
 config = ConfigParser()
-config.read(os.path.expanduser('~/.simple_todo'))
+
 try:
+    config.read(os.path.expanduser('~/.simple_todo'))
     TODO_FILE = config.get("data", "todo_file")
-except KeyError:
+except (NoSectionError, KeyError) as err:
     TODO_FILE = os.path.expanduser("~/todo.txt")
 
 today = datetime.now()
@@ -54,12 +55,15 @@ class TodoList(object):
     def __init__(self):
         self.todos = []
         self.completed = []
-        with open(TODO_FILE, 'r') as todo_file:
-            for todo in (Todo(todo_line) for todo_line in todo_file):
-                if todo.completed:
-                    self.completed.append(todo)
-                else:
-                    self.todos.append(todo)
+        try:
+            with open(TODO_FILE, 'r') as todo_file:
+                for todo in (Todo(todo_line) for todo_line in todo_file):
+                    if todo.completed:
+                        self.completed.append(todo)
+                    else:
+                        self.todos.append(todo)
+        except IOError:
+            pass
 
     def bump(self, item_num):
         '''Move an item from anywhere in the list to the top'''
