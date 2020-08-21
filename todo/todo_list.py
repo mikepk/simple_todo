@@ -67,16 +67,22 @@ class TodoList(object):
         self.todos.insert(0, item)
 
     def complete(self, item_num):
+        '''Mark an item as completed and move it to the done list'''
+        # remve it from todos, and add to completed
         item = self.todos.pop(item_num - 1)
         item.completed = True
         self.completed.insert(0, item)
 
     def uncomplete(self, item_num):
+        '''Take an item that was marked as complete and undo it'''
+        # remve it from completed, and add to todos
         item = self.completed.pop(item_num - 1)
         item.completed = False
         self.todos.insert(0, item)
 
     def add(self, text, priority=1):
+        '''Add 'text' as a new item in the todo list, can take an optional
+        priority argument to insert higher in the list'''
         item = Todo.create(text)
         self.todos.insert(priority - 1, item)
 
@@ -84,7 +90,8 @@ class TodoList(object):
         output = ["-" * 44]
         for idx, todo in enumerate(self.todos):
             output.append("{0}: {1}".format(idx + 1, todo.todo_text))
-        output.append("=" * 20 + "done" + "=" * 20)
+        if self.completed:
+            output.append("=" * 20 + "done" + "=" * 20)
         for idx, todo in enumerate(self.completed):
             output.append(todo.todo_text)
         return "\n".join(output) + "\n"
@@ -96,6 +103,9 @@ class TodoList(object):
                 todo_file.write("{}\n".format(todo))
             for todo in self.completed:
                 todo_file.write("{}\n".format(todo))
+
+    def __str__(self):
+        return self.render()
 
 
 if __name__ == "__main__":

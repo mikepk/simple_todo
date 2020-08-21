@@ -2,39 +2,38 @@
 import argparse
 import sys
 
-from todo_list import TodoList
+from .todo_list import TodoList
 
 
 def render_todos():
-    todo_list = TodoList()
-    print(todo_list.render())
+    print(TodoList())
 
 
 def add_todo(options):
     todo_list = TodoList()
     todo_list.add(options.text)
-    print(todo_list.render())
+    print(todo_list)
     todo_list.save()
 
 
 def bump_todo(options):
     todo_list = TodoList()
     todo_list.bump(options.item)
-    print(todo_list.render())
+    print(todo_list)
     todo_list.save()
 
 
 def complete_todo(options):
     todo_list = TodoList()
     todo_list.complete(options.item)
-    print(todo_list.render())
+    print(todo_list)
     todo_list.save()
 
 
 def uncomplete_todo(options):
     todo_list = TodoList()
     todo_list.uncomplete(options.item)
-    print(todo_list.render())
+    print(todo_list)
     todo_list.save()
 
 
